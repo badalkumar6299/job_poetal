@@ -5,7 +5,7 @@ const Footer = () => {
   return (
     <div>
         <img src={assets.logo} alt=""/>
-        <p> Copyright @</p>
+        <p> Copyright @jobporatal2025</p>
     </div>
   )
 }

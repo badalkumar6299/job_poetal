@@ -1,9 +1,24 @@
-import React from 'react'
+import React, { useState } from 'react'
+import Navbar from '../components/Navbar'
 
 const Applications = () => {
+
+const[isEdit,setEdit] = useState(false)
+
   return (
     <div>
-      Apple
+      <Navbar/>
+      <h2>Your Resume</h2>
+      <div>
+        {
+          isEdit ?<>
+          </>:
+          <div>
+            <a href="">Resume</a>
+            <button>Edit</button>
+            </div>
+        }
+      </div>
     </div>
   )
 }

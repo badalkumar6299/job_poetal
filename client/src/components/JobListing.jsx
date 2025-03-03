@@ -4,83 +4,80 @@ import { assets, JobCategories, JobLocations } from "../assets/assets";
 import JobCard from "./JobCard";
 
 const JobListing = () => {
-  const { isSearched, searchFilter, setSearchFilter, jobs } =
-    useContext(AppContext);
+  const { isSearched, searchFilter, setSearchFilter, jobs } = useContext(AppContext);
   const [showFilter, setFilter] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [selectedLocations, setSelectedLocations] = useState([]);
 
-  const [filteredJobs, setFilteredJobs] = useState([jobs]);
+  const [filteredJobs, setFilteredJobs] = useState([]);
+
   const handleCategoryChange = (category) => {
     setSelectedCategories((prev) =>
-      prev.includes(category)
-        ? prev.filter((c) => c !== category)
-        : [...prev, category]
+      prev.includes(category) ? prev.filter((c) => c !== category) : [...prev, category]
     );
   };
 
   const handleLocationChange = (location) => {
     setSelectedLocations((prev) =>
-      prev.includes(location)
-        ? prev.filter((c) => c !== location)
-        : [...prev, location]
-    )
+      prev.includes(location) ? prev.filter((c) => c !== location) : [...prev, location]
+    );
   };
-useEffect(() =>{
-    const matchesCategory = job =>selectedCategories.length===0 || selectedCategories.includes(job.category)
 
-    const matchesLocation = job => selectedLocations.length===0 || selectedLocations.includes(job.location)
+  useEffect(() => {
+    const matchesCategory = (job) => selectedCategories.length === 0 || selectedCategories.includes(job.category);
+    const matchesLocation = (job) => selectedLocations.length === 0 || selectedLocations.includes(job.location);
+    const matchesTitles = (job) => searchFilter.title === "" || job.title.toLowerCase().includes(searchFilter.title.toLowerCase());
+    const matchesSearchLocation = (job) => searchFilter.location === "" || job.location.toLowerCase().includes(searchFilter.location.toLowerCase());
 
-    const matchesTitles = job => searchFilter.title==="" || job.title.toLowerCase().includes(searchFilter.title.toLowerCase())
-},[])
+    const newFilteredJobs = jobs
+      .slice()
+      .reverse()
+      .filter((job) => matchesCategory(job) && matchesLocation(job) && matchesTitles(job) && matchesSearchLocation(job));
+
+    setFilteredJobs(newFilteredJobs);
+    setCurrentPage(1);
+  }, [jobs, selectedCategories, selectedLocations, searchFilter]);
+
   const jobsPerPage = 6;
-  const totalPages = Math.ceil(jobs.length / jobsPerPage);
+  const totalPages = Math.ceil(filteredJobs.length / jobsPerPage);
 
   return (
     <div className="container flex flex-col py-8 mx-auto 2xl:px-20 lg:flex-row max-lg:space-y-8">
       {/* Sidebar */}
       <div className="w-full px-4 bg-white lg:w-1/4">
         {/* Search Filter From Hero Component */}
-        {isSearched &&
-          (searchFilter.title !== "" || searchFilter.location !== "") && (
-            <div>
-              <h3 className="mb-4 text-lg font-medium">Current Search</h3>
-              <div className="mb-4 text-gray-600">
-                {searchFilter.title && (
-                  <span className="ml-2 inline-flex items-center gap-2.5 bg-blue-50 border border-blue-200 px-4 py-1.5 rounded">
-                    {searchFilter.title}
-                    <img
-                      onClick={() =>
-                        setSearchFilter((prev) => ({ ...prev, title: "" }))
-                      }
-                      className="cursor-pointer"
-                      src={assets.cross_icon}
-                      alt="Remove title filter"
-                    />
-                  </span>
-                )}
-                {searchFilter.location && (
-                  <span className="ml-2 inline-flex items-center gap-2.5 bg-red-50 border border-red-200 px-4 py-1.5 rounded">
-                    {searchFilter.location}
-                    <img
-                      onClick={() =>
-                        setSearchFilter((prev) => ({ ...prev, location: "" }))
-                      }
-                      className="cursor-pointer"
-                      src={assets.cross_icon}
-                      alt="Remove location filter"
-                    />
-                  </span>
-                )}
-              </div>
+        {isSearched && (searchFilter.title !== "" || searchFilter.location !== "") && (
+          <div>
+            <h3 className="mb-4 text-lg font-medium">Current Search</h3>
+            <div className="mb-4 text-gray-600">
+              {searchFilter.title && (
+                <span className="ml-2 inline-flex items-center gap-2.5 bg-blue-50 border border-blue-200 px-4 py-1.5 rounded">
+                  {searchFilter.title}
+                  <img
+                    onClick={() => setSearchFilter((prev) => ({ ...prev, title: "" }))}
+                    className="cursor-pointer"
+                    src={assets.cross_icon}
+                    alt="Remove title filter"
+                  />
+                </span>
+              )}
+              {searchFilter.location && (
+                <span className="ml-2 inline-flex items-center gap-2.5 bg-red-50 border border-red-200 px-4 py-1.5 rounded">
+                  {searchFilter.location}
+                  <img
+                    onClick={() => setSearchFilter((prev) => ({ ...prev, location: "" }))}
+                    className="cursor-pointer"
+                    src={assets.cross_icon}
+                    alt="Remove location filter"
+                  />
+                </span>
+              )}
             </div>
-          )}
+          </div>
+        )}
 
-        <button
-          onClick={() => setFilter((prev) => !prev)}
-          className="px-6 py-1.5 rounded border border-gray-400 lg:hidden"
-        >
+        <button onClick={() => setFilter((prev) => !prev)} className="px-6 py-1.5 rounded border border-gray-400 lg:hidden">
           {showFilter ? "Close" : "Filter"}
         </button>
 
@@ -104,9 +101,7 @@ useEffect(() =>{
 
         {/* Location Filter */}
         <div className={`max-lg:${showFilter ? "block" : "hidden"}`}>
-          <h4 className="py-4 text-lg font-medium pt-14">
-            Search by Locations
-          </h4>
+          <h4 className="py-4 text-lg font-medium pt-14">Search by Locations</h4>
           <ul className="space-y-4 text-gray-600">
             {JobLocations.map((location, index) => (
               <li key={index}>
@@ -131,40 +126,39 @@ useEffect(() =>{
         <p className="mb-8">Get your desired job from top companies</p>
 
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">
-          {jobs
-            .slice((currentPage - 1) * jobsPerPage, currentPage * jobsPerPage)
-            .map((job, index) => (
-              <JobCard key={index} job={job} />
-            ))}
+          {filteredJobs.slice((currentPage - 1) * jobsPerPage, currentPage * jobsPerPage).map((job, index) => (
+            <JobCard key={index} job={job} />
+          ))}
         </div>
 
         {/* Pagination */}
-        {jobs.length > 0 && (
+        {filteredJobs.length > 0 && (
           <div className="flex items-center justify-center mt-10 space-x-2">
             {/* Left Arrow */}
             <a
+              key={0} // Added key here
               href="#job-list"
               onClick={(e) => {
                 e.preventDefault();
-                setCurrentPage((prev) => Math.max(prev - 1, 1));
+                setCurrentPage((prev) => (prev > 1 ? prev - 1 : 1));
               }}
             >
-              <img src={assets.left_arrow_icon} alt="Previous Page" />
+              <img
+                src={assets.left_arrow_icon}
+                alt="Previous Page"
+                className={currentPage === 1 ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}
+              />
             </a>
 
             {/* Page Numbers */}
-            {Array.from({ length: totalPages }).map((_, index) => (
-              <a key={index} href="#job-list">
+            {Array.from({ length: totalPages }).map((_, pageIndex) => (
+              <a key={pageIndex} href="#job-list">
                 <button
-                  onClick={() => setCurrentPage(index + 1)}
+                  onClick={() => setCurrentPage(pageIndex + 1)}
                   className={`w-10 h-10 flex items-center justify-center border border-gray-300 rounded 
-                                    ${
-                                      currentPage === index + 1
-                                        ? "bg-blue-500 text-white"
-                                        : "bg-gray-500 text-white"
-                                    }`}
+                    ${currentPage === pageIndex + 1 ? "bg-blue-500 text-white" : "bg-gray-500 text-white"}`}
                 >
-                  {index + 1}
+                  {pageIndex + 1}
                 </button>
               </a>
             ))}
@@ -174,10 +168,14 @@ useEffect(() =>{
               href="#job-list"
               onClick={(e) => {
                 e.preventDefault();
-                setCurrentPage((prev) => Math.min(prev + 1, totalPages));
+                setCurrentPage((prev) => (prev < totalPages ? prev + 1 : totalPages));
               }}
             >
-              <img src={assets.right_arrow_icon} alt="Next Page" />
+              <img
+                src={assets.right_arrow_icon}
+                alt="Next Page"
+                className={currentPage === totalPages ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}
+              />
             </a>
           </div>
         )}
