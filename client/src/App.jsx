@@ -5,7 +5,9 @@ import Applications from './pages/Applications';
 import Home from './pages/home'; // Updated to match the filename case
 
 const App = () => {
+  const {showRecruiterLogin} = useContext(AppContext)
   return (
+    {showRecruiterLogin && <RecruiterLogin/>}
     <AppContextProvider>
       <div>
         <Routes>
