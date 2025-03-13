@@ -1,22 +1,34 @@
 import { Route, Routes } from 'react-router-dom';
-import { AppContextProvider } from './context/AppContext';
-import Applyjob from './pages/Applyjob';
+import { useContext } from 'react';
+import { AppContext } from './context/AppContext'; 
+import Home from './pages/Home';
+import ApplyJob from './pages/ApplyJob';
 import Applications from './pages/Applications';
-import Home from './pages/home'; // Updated to match the filename case
+import RecruiterLogin from './components/RecruiterLogin';
+import Dashboard from './pages/Dashboard';
+import AddJob from './pages/AddJob';
+import ManageJobs from './pages/ManageJobs';
+import ViewApplications from './pages/ViewApplications';
+import 'quill/dist/quill.snow.css'
 
 const App = () => {
-  const {showRecruiterLogin} = useContext(AppContext)
+  const { showRecruiterLogin } = useContext(AppContext);
+
   return (
-    {showRecruiterLogin && <RecruiterLogin/>}
-    <AppContextProvider>
-      <div>
-        <Routes>
-        <Route path='/' element={<Home/>} />
-        <Route path='/apply-job/:id' element={<Applyjob />} />
+    <div>
+      {showRecruiterLogin && <RecruiterLogin />}
+      <Routes>
+        <Route path='/' element={<Home />} />
+        <Route path='/apply-job/:id' element={<ApplyJob />} />
         <Route path='/applications' element={<Applications />} />
-        </Routes>
-      </div>
-    </AppContextProvider>
+        <Route path='/dashboard' element={<Dashboard />}>
+            <Route path='add-job' element={<AddJob />} />
+            <Route path='manage-jobs' element={<ManageJobs />} />
+            <Route path='view-applications' element={<ViewApplications />} />   
+        </Route>
+        
+      </Routes>
+    </div>
   );
 };
 
