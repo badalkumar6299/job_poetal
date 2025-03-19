@@ -11,7 +11,15 @@ dotenv.config(); // Load environment variables
 const app = express();
 
 // Connect to MongoDB database
-await connectDB()
+const startServer = async () => {
+    await connectDB();
+    app.listen(PORT, () => {
+        console.log(`Server is running on port ${PORT}`);
+    });
+};
+
+startServer();
+
 
 // Middleware
 app.use(cors());
