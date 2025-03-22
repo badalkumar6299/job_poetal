@@ -3,7 +3,7 @@ import User from "../models/User.js";
 
 //manage Cleark API user database 
 
-export const ClearkWebhooks = async(req, res)=>{
+export const clearkWebhooks = async(req, res)=>{
     try{
         //create a Svix instance with cleark webhooks
         const whook = new Webhook(process.env.CLEARK_WEBHOOK_SECRET)
