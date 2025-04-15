@@ -1,27 +1,18 @@
 import './config/instrument.js'
 import express from 'express';
-import cors from 'cors';
-import dotenv from 'dotenv';
+import cors from "cors";
+import 'dotenv/config';
 import connectDB from './config/db.js';
 import * as Sentry from "@sentry/node";
-import { ClearkWebhooks } from './controllers/webhooks.js';
+import { clearkWebhooks } from './controller/webhooks.js';
 
-dotenv.config(); // Load environment variables
-
+// Initialize express
 const app = express();
 
 // Connect to MongoDB database
-const startServer = async () => {
-    await connectDB();
-    app.listen(PORT, () => {
-        console.log(`Server is running on port ${PORT}`);
-    });
-};
+await connectDB();
 
-startServer();
-
-
-// Middleware
+// Middlewares
 app.use(cors());
 app.use(express.json());
 
@@ -31,19 +22,12 @@ app.get("/debug-sentry", function mainHandler(req, res) {
     throw new Error("My first Sentry error!");
   });
   
-
-  app.post('/webhooks',ClearkWebhooks)
-
-// Error Handling Middleware
-app.use((err, req, res, next) => {
-    console.error(err.stack);
-    res.status(500).json({ message: "Internal Server Error" });
-});
-
-// Server Setup
-const PORT = process.env.PORT || 9000;
+app.post('/webhooks',clearkWebhooks)
+// Port
+const port = process.env.PORT || 5000;
 
 Sentry.setupExpressErrorHandler(app);
-app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
+
+app.listen(port, () => {
+    console.log(`Server is running on port ${port}`);
 });

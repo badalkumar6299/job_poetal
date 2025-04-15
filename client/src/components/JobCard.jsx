@@ -1,5 +1,5 @@
 import React from 'react'
-import PropTypes from 'prop-types'; // Import PropTypes
+import PropTypes from 'prop-types'; 
 import { assets } from '../assets/assets'
 import {useNavigate} from 'react-router-dom'
 

@@ -8,7 +8,7 @@ const ViewApplications = () => {
         <table className='w-full max-w-4xl bg-white border border-gray-200 max-sm:text-sm'>
           <thead>
             <tr className='border-b'>
-              <th className='px-4 py-2 text-left'>#</th>
+              <th className='px-4 py-2 text-left'>S/N</th>
               <th className='px-4 py-2 text-left'>User name</th>
               <th className='px-4 py-2 text-left max-sm:hidden'>Job Title</th>
               <th className='px-4 py-2 text-left max-sm:hidden'>Location</th>

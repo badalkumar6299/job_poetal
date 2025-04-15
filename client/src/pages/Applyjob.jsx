@@ -26,7 +26,7 @@ const Applyjob = () => {
       <Navbar />
       <div className="container flex flex-col min-h-screen px-4 py-10 mx-auto 2xl:px-20">
         <div className="w-full text-black bg-white rounded-lg">
-          <div className="flex flex-wrap justify-center gap-8 py-20 mb-6 md:justify-between px-14 bg-sky-50 border-sky-400 rounded-xl">
+          <div className="flex flex-wrap justify-center gap-8 py-20 mb-6 md:justify-between px-14 bg-sky-50 border-sky-800 rounded-xl">
             <div className="flex flex-col items-center md:flex-row">
               <img
                 className="h-24 p-4 mr-4 bg-white border rounded-lg max-md:mb-4"
@@ -71,7 +71,7 @@ const Applyjob = () => {
               <h2>More jobs from {jobData?.companyId?.name}</h2>
               {jobs
                 .filter(job => job.companyId?._id === jobData?.companyId?._id && job._id !== jobData?._id)
-                .slice(0, 4)
+                .slice(0, 3)
                 .map((job, index) => (
                   <JobCard key={index} job={job} />
                 ))}
@@ -79,7 +79,8 @@ const Applyjob = () => {
           </div>
         </div>
       </div>
-      <footer></footer>
+      <footer>
+      </footer>
     </div>
   ) : (
     <p>Loading...</p>

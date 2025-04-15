@@ -13,7 +13,7 @@ const Dashboard = () => {
             <div className='flex items-center justify-between px-5'>
                 <img onClick={e => navigate('/')} className='cursor-pointer max-sm:w-32' src={assets.logo} alt="" />
                 <div className='flex items-center gap-3'>
-                    <p className='max-sm:hidden'>Welcome, GreatStack</p>
+                    <p className='max-sm:hidden'>Welcome</p>
                     <div className='relative group'>
                         <img className='w-8 border rounded-full'src={assets.company_icon} alt="" />
                         <div className='absolute top-0 right-0 z-10 hidden pt-12 text-black rounded group-hover:block'>

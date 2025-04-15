@@ -1,27 +1,24 @@
-import * as Sentry from "@sentry/node"
+import * as Sentry from "@sentry/node";
 import { nodeProfilingIntegration } from "@sentry/profiling-node";
-import mongoose from "mongoose";
 
-// Ensure to call this before requiring any other modules!
 Sentry.init({
-  dsn: "https://665881b224a9b3078065df9f490246c0@o4508991445073920.ingest.us.sentry.io/4508991452807168",
-  integrations: [
-    // Add our Profiling integration
-    nodeProfilingIntegration(),
-    Sentry.mongooseIntegration()
-  ],
-
-  // Set tracesSampleRate to 1.0 to capture 100%
-  // of transactions for tracing.
-  // We recommend adjusting this value in production
-  // Learn more at
-  // https://docs.sentry.io/platforms/javascript/guides/node/configuration/options/#tracesSampleRate
-  //tracesSampleRate: 1.0,
-
-  // Set profilesSampleRate to 1.0 to profile 100%
-  // of sampled transactions.
-  // This is relative to tracesSampleRate
-  // Learn more at
-  // https://docs.sentry.io/platforms/javascript/guides/node/configuration/options/#profilesSampleRate
-  profilesSampleRate: 1.0,
-});
+    dsn: "https://20860d3fc8e61f0263319ef450f85985@o4509020893741056.ingest.us.sentry.io/4509158493192192",
+    integrations: [
+      nodeProfilingIntegration(),
+      Sentry.mongooseIntegration()
+    ],
+    // Tracing
+    //tracesSampleRate: 1.0, //  Capture 100% of the transactions
+    // Set sampling rate for profiling - this is evaluated only once per SDK.init call
+    profileSessionSampleRate: 1.0,
+    // Trace lifecycle automatically enables profiling during active traces
+    profileLifecycle: 'trace',
+  });
+  
+  // Profiling happens automatically after setting it up with `Sentry.init()`.
+  // All spans (unless those discarded by sampling) will have profiling data attached to them.
+  Sentry.startSpan({
+    name: "My Span",
+  }, () => {
+    // The code executed here will be profiled
+  });
