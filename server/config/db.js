@@ -1,11 +1,17 @@
+// config/db.js
 import mongoose from "mongoose";
 
-// Function to connect to the mongodb database
+const connectDB = async () => {
+  try {
+    await mongoose.connect(process.env.MONGODB_URI, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    });
+    console.log('✅ Database Connected');
+  } catch (error) {
+    console.error('❌ MongoDB connection error:', error.message);
+    process.exit(1);
+  }
+};
 
-const connectDB = async () =>{
-    mongoose.connection.on('connected',() => console.log('Database Connected'))
-
-    await mongoose.connect(`${process.env.MONGODB_URI}/job-portel`)
-}
-
-export default connectDB
+export default connectDB;
