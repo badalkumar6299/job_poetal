@@ -54,7 +54,7 @@ const Hero = () => {
                 </div>
             </div>
         </div>
-    );
+    );k
 };
 
 export default Hero;
