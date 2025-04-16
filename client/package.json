@@ -10,7 +10,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@clerk/nextjs": "^6.12.11",
+    "@clerk/clerk-react": "^5.28.0",
+    "@clerk/nextjs": "^6.15.0",
     "body-parser": "^2.2.0",
     "cors": "^2.8.5",
     "dotenv": "^16.4.7",
