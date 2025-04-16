@@ -1,7 +1,7 @@
 import { Webhook } from "svix";
 import User from "../models/User.js";
 
-//manage Cleark API user database 
+//manage Cleark API user database
 
 export const clearkWebhooks = async(req, res)=>{
     try{
